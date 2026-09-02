@@ -11,6 +11,23 @@ def test_products_page_visibility(page:Page):
         page.get_by_text("Products")
     ).to_be_visible()
 
+#All Products Visible
+# Verify all products are displayed
+def test_all_products_displayed(page: Page):
+    page.goto("https://www.saucedemo.com/")
+
+    page.get_by_placeholder("Username").fill("standard_user")
+    page.get_by_placeholder("Password").fill("secret_sauce")
+    page.get_by_role("button", name="Login").click()
+
+    expect(
+        page.get_by_text("Products")
+    ).to_be_visible()
+
+    products = page.locator(".inventory_item")
+
+    assert products.count() == 6
+
 #Add the First Item to the Cart and Verify the Cart Badge
 def test_add_to_cart(page:Page):
     page.goto("https://www.saucedemo.com/")
