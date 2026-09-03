@@ -65,7 +65,51 @@ def test_verify_prices(page:Page):
 
     assert products.all_text_contents() == expected_prices
 
+#Products Sorting A-Z
+def test_products_sort_az (page:Page):
+    page.goto("https://www.saucedemo.com/")
 
+    page.get_by_placeholder("Username").fill("standard_user")
+    page.get_by_placeholder("Password").fill("secret_sauce")
+    page.get_by_role("button",name="Login").click()
+
+    expect(
+        page.get_by_text("Products")
+    ).to_be_visible()
+
+    expected_products_after_az=["Sauce Labs Backpack","Sauce Labs Bike Light","Sauce Labs Bolt T-Shirt","Sauce Labs Fleece Jacket","Sauce Labs Onesie","Test.allTheThings() T-Shirt (Red)"]
+
+    #This code only sorts the product in A-Z format
+    page.locator(".product_sort_container").select_option("az")
+
+# After sorting, locate all the product names
+    products= page.locator(".inventory_item_name")
+
+    assert products.all_text_contents() == expected_products_after_az
+
+#Products Sorting Z-A
+def test_products_sort_za (page:Page):
+    page.goto("https://www.saucedemo.com/")
+
+    page.get_by_placeholder("Username").fill("standard_user")
+    page.get_by_placeholder("Password").fill("secret_sauce")
+    page.get_by_role("button",name="Login").click()
+
+    expect(
+        page.get_by_text("Products")
+    ).to_be_visible()
+
+    expected_products_after_za=["Test.allTheThings() T-Shirt (Red)","Sauce Labs Onesie","Sauce Labs Fleece Jacket","Sauce Labs Bolt T-Shirt","Sauce Labs Bike Light","Sauce Labs Backpack"]
+
+    #This code only sorts the product in Z-A format
+    page.locator(".product_sort_container").select_option("za")
+
+# After sorting, locate all the product names
+    products=page.locator(".inventory_item_name")
+
+    #Assert and Check
+    assert products.all_text_contents() == expected_products_after_za
+    
 #Add the First Item to the Cart and Verify the Cart Badge
 def test_add_to_cart(page:Page):
     page.goto("https://www.saucedemo.com/")
