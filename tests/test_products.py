@@ -109,6 +109,54 @@ def test_products_sort_za (page:Page):
 
     #Assert and Check
     assert products.all_text_contents() == expected_products_after_za
+
+#After Sorting Prices, Low -> High
+def test_price_lowhigh (page:Page):
+    page.goto("https://www.saucedemo.com/")
+
+    page.get_by_placeholder("Username").fill("standard_user")
+    page.get_by_placeholder("Password").fill("secret_sauce")
+    page.get_by_role("button",name="Login").click()
+
+    expect(
+        page.get_by_text("Products")
+    ).to_be_visible()
+
+    expected_prices_lh=["$7.99","$9.99","$15.99","$15.99","$29.99","$49.99"]
+
+ #Sort The Prices from Low to High
+    page.locator(".product_sort_container").select_option("lohi")
+
+# After sorting, locate all the product names
+    products=page.locator(".inventory_item_price")
+
+# Verify actual product prices match the expected low-to-high order
+    assert products.all_text_contents() == expected_prices_lh
+
+#After Sorting Prices, High -> Low
+def test_price_highlow (page:Page):
+    page.goto("https://www.saucedemo.com/")
+
+    page.get_by_placeholder("Username").fill("standard_user")
+    page.get_by_placeholder("Password").fill("secret_sauce")
+    page.get_by_role("button",name="Login").click()
+
+    expect(
+        page.get_by_text("Products")
+    ).to_be_visible()
+
+    expected_prices_hl=["$49.99","$29.99","$15.99","$15.99","$9.99","$7.99"]
+
+ #Sort The Prices from High to Low
+    page.locator(".product_sort_container").select_option("hilo")
+
+# After sorting, locate all the product names
+    products=page.locator(".inventory_item_price")
+
+# Verify actual product prices match the expected low-to-high order
+    assert products.all_text_contents() == expected_prices_hl
+
+
     
 #Add the First Item to the Cart and Verify the Cart Badge
 def test_add_to_cart(page:Page):
